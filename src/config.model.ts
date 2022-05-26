@@ -32,6 +32,7 @@ export interface Config {
   reportFileSet: ReportFileSet
   threshold: CoverageThreshold
   reportMode: ReportMode
+  reportFiles: String[]
 }
 
 /**
@@ -52,6 +53,7 @@ export function makeCompleteConfiguration(config?: Partial<Config>): Config {
       functions: 100,
       lines: 100,
     },
+    reportFiles: []
   }
 
   const combined = config ? { ...defaults, ...config } : defaults

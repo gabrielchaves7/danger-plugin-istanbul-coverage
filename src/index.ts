@@ -188,8 +188,16 @@ function getCombinedCoverageCollection(coveragePaths: SourcePathExplicit[]): Cov
  */
 export function istanbulCoverage(config?: Partial<Config>): Promise<void> {
   const combinedConfig = makeCompleteConfiguration(config)
-
   const coveragePaths = getCoveragePaths(combinedConfig.coveragePaths)
+  const filterFiles = (filename: string) => {
+    let displayFile = false;
+    combinedConfig.reportFiles.forEach(pattern => {
+      if (filename.match(pattern.toString())) {
+        displayFile = true;
+      }
+    });
+    return displayFile;
+  };
 
   let coverage: CoverageCollection
   try {
@@ -213,8 +221,12 @@ export function istanbulCoverage(config?: Partial<Config>): Promise<void> {
     const createdFiles = filterForCoveredFiles(gitRoot, danger.git.created_files, coverage)
     const allFiles = Object.keys(coverage).filter(filename => filename !== "total")
 
-    const files = getFileSet(combinedConfig.reportFileSet, allFiles, modifiedFiles, createdFiles)
+    let files = getFileSet(combinedConfig.reportFileSet, allFiles, modifiedFiles, createdFiles)
 
+    if(combinedConfig.reportFiles.length){
+      files = allFiles.filter(filename => filterFiles(filename));
+    }
+    
     if (files.length === 0) {
       return
     }

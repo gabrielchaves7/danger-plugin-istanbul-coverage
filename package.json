@@ -1,5 +1,5 @@
 {
-  "name": "danger-plugin-istanbul-coverage",
+  "name": "ct-danger-plugin-istanbul-coverage",
   "description": "Danger.js plugin for monitoring istanbul code coverage on changed files.",
   "author": {
     "name": "Darcy Rayner",
@@ -20,7 +20,7 @@
     "coverage",
     "testing"
   ],
-  "version": "0.1.0",
+  "version": "0.1.4",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

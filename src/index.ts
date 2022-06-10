@@ -33,7 +33,9 @@ export declare function fail(message: string): void
 export declare function markdown(message: string): void
 
 function filterForCoveredFiles(basePath: string, files: string[], coverage: CoverageCollection): string[] {
-  return files.map(filename => path.resolve(basePath, filename)).filter(filename => coverage[filename] !== undefined)
+  return files
+    .map((filename) => path.resolve(basePath, filename))
+    .filter((filename) => coverage[filename] !== undefined)
 }
 
 function getFileSet(reportChangeType: ReportFileSet, all: string[], modified: string[], created: string[]): string[] {
@@ -114,7 +116,7 @@ function generateReport(basePath: string, branch: string, coverage: CoverageMode
 File | Line Coverage | Statement Coverage | Function Coverage | Branch Coverage
 ---- | ------------: | -----------------: | ----------------: | --------------:`
 
-  const lines = Object.keys(coverage.displayed).map(filename => {
+  const lines = Object.keys(coverage.displayed).map((filename) => {
     const e = coverage.displayed[filename]
     const shortFilename = formatSourceName(path.relative(basePath, filename))
     const linkFilename = formatLinkName(path.relative(basePath, filename), branch)
@@ -145,11 +147,11 @@ File | Line Coverage | Statement Coverage | Function Coverage | Branch Coverage
     formatItem(coverage.total.functions),
     formatItem(coverage.total.branches),
   ].join(" | ")
-  return [header, ...lines, ellided, total, ""].filter(part => part !== undefined).join("\n")
+  return [header, ...lines, ellided, total, ""].filter((part) => part !== undefined).join("\n")
 }
 
 function getCoveragePaths(coveragePaths: SourcePath[]): SourcePathExplicit[] {
-  return coveragePaths.map(singleCoveragePath => {
+  return coveragePaths.map((singleCoveragePath) => {
     let originalPath: string
     let type: SourceType
     if (typeof singleCoveragePath === "string") {
@@ -179,7 +181,7 @@ function parseSourcePath(sourcePath: SourcePathExplicit): CoverageCollection {
 
 function getCombinedCoverageCollection(coveragePaths: SourcePathExplicit[]): CoverageCollection {
   return coveragePaths
-    .map(coveragePath => parseSourcePath(coveragePath))
+    .map((coveragePath) => parseSourcePath(coveragePath))
     .reduce((previous, current) => ({ ...previous, ...current }), {})
 }
 
@@ -190,14 +192,14 @@ export function istanbulCoverage(config?: Partial<Config>): Promise<void> {
   const combinedConfig = makeCompleteConfiguration(config)
   const coveragePaths = getCoveragePaths(combinedConfig.coveragePaths)
   const filterFiles = (filename: string) => {
-    let displayFile = false;
-    combinedConfig.reportFiles.forEach(pattern => {
+    let displayFile = false
+    combinedConfig.reportFiles.forEach((pattern) => {
       if (filename.match(pattern.toString())) {
-        displayFile = true;
+        displayFile = true
       }
-    });
-    return displayFile;
-  };
+    })
+    return displayFile
+  }
 
   let coverage: CoverageCollection
   try {
@@ -214,20 +216,20 @@ export function istanbulCoverage(config?: Partial<Config>): Promise<void> {
 
   const gitProperties = Promise.all([gitService.getRootDirectory(), gitService.getCurrentCommit()])
 
-  return gitProperties.then(values => {
+  return gitProperties.then((values) => {
     const gitRoot = values[0]
     const gitBranch = values[1]
     const modifiedFiles = filterForCoveredFiles(gitRoot, danger.git.modified_files, coverage)
     const createdFiles = filterForCoveredFiles(gitRoot, danger.git.created_files, coverage)
-    const allFiles = Object.keys(coverage).filter(filename => filename !== "total")
+    const allFiles = Object.keys(coverage).filter((filename) => filename !== "total")
 
     let files = getFileSet(combinedConfig.reportFileSet, allFiles, modifiedFiles, createdFiles)
 
-    if(combinedConfig.reportFiles.length){
-      files = allFiles.filter(filename => filterFiles(filename));
+    if (combinedConfig.reportFiles.length) {
+      files = allFiles.filter((filename) => filterFiles(filename))
     }
-    
-    if (files.length === 0) {
+
+    if (combinedConfig.reportFiles.length === 0) {
       return
     }
 

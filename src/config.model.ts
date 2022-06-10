@@ -53,7 +53,7 @@ export function makeCompleteConfiguration(config?: Partial<Config>): Config {
       functions: 100,
       lines: 100,
     },
-    reportFiles: []
+    reportFiles: [],
   }
 
   const combined = config ? { ...defaults, ...config } : defaults

@@ -6,8 +6,8 @@ jest.mock("../filesystem.service")
 function setupCoverageFile(coverage: string | undefined) {
   ;(FilesystemService as any).mockImplementation(() => {
     return {
-      exists: p => coverage !== undefined,
-      read: p => (coverage !== undefined ? Buffer.from(coverage, "utf8") : undefined),
+      exists: (p) => coverage !== undefined,
+      read: (p) => (coverage !== undefined ? Buffer.from(coverage, "utf8") : undefined),
     }
   })
 }

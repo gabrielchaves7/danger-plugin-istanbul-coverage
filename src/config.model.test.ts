@@ -13,6 +13,7 @@ describe("makeCompleteConfiguration", () => {
       functions: 100,
       lines: 100,
     },
+    reportFiles: [],
   }
 
   it("returns a default configuration when sent undefined", () => {

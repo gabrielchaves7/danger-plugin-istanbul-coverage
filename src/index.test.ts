@@ -49,8 +49,8 @@ function setupGitService() {
 function setupCoverageFile(coverages: string[] = []) {
   ;(FilesystemService as any).mockImplementation(() => {
     return {
-      exists: p => coverages.length !== 0,
-      read: p => {
+      exists: (p) => coverages.length !== 0,
+      read: (p) => {
         const coverage = coverages.pop()
         return coverage !== undefined ? coverage : undefined
       },
